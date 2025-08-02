@@ -1,7 +1,6 @@
 package com.git_check.common_module.response;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 
 import lombok.Builder;
 
@@ -11,11 +10,20 @@ public record CommonResponse<T>(
     String message,
     T data
 ) {
-    public static <T> CommonResponse<T> success(ResponseEntity<T> responseEntity) {
+    public static <T> CommonResponse<T> success(T data, String message) {
         return CommonResponse.<T>builder()
-            .code(responseEntity.getStatusCode().value())
-            .message("요청이 성공적으로 처리되었습니다.")
-            .data(responseEntity.getBody())
+            .code(HttpStatus.OK.value())
+            .message(message)
+            .data(data)
+            .build();
+    }
+
+    
+    public static <T> CommonResponse<T> success(String message) {
+        return CommonResponse.<T>builder()
+            .code(HttpStatus.OK.value())
+            .message(message)
+            .data(null)
             .build();
     }
 
@@ -23,6 +31,14 @@ public record CommonResponse<T>(
         return CommonResponse.<Void>builder()
             .code(status.value())
             .message(message)
+            .data(null)
+            .build();
+    }
+
+    public static CommonResponse<Void> except() {
+        return CommonResponse.<Void>builder()
+            .code(HttpStatus.INTERNAL_SERVER_ERROR.value())
+            .message("서버 내부 오류가 발생했습니다.")
             .data(null)
             .build();
     }
