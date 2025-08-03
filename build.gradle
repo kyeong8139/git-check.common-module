@@ -36,3 +36,17 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.git-check'
+            artifactId = 'common-module'
+            version = '0.0.1-SNAPSHOT'
+            from components.java
+        }
+    }
+    repositories {
+        mavenLocal()
+    }
+}
